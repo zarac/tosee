@@ -1,0 +1,33 @@
+#feedback {
+    position: fixed;
+    top: 10px;
+    margin: 100px auto;
+}
+
+.feedback {
+    margin: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 5px;
+    border: 1px solid #810401;
+}
+
+.feedback.error {
+    color: #FF5555;
+}
+
+.feedback.info {
+    color: #5555FF;
+}
+
+.feedback .message {
+    color: #38051f;
+}
+
+.feedback.success {
+    color: #55FF55;
+}
+
+.feedback.warning {
+    color: #FFFF55;
+}

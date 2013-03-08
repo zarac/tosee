@@ -1,0 +1,15 @@
+{
+  "name": "template-web-node",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app",
+    "postinstall": "cp node_modules/dustjs-linkedin/dist/dust-full-1.1.1.js static/js/"
+  },
+  "dependencies": {
+    "express": "3.1",
+    "mongodb": "1.2",
+    "consolidate": "0.8",
+    "dustjs-linkedin": "1.1"
+  }
+}

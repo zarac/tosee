@@ -1,19 +1,22 @@
+{?error}
+<h1>Couldn't make request. It probably timed out, try again or something. ({error})</h1>
+
+{:else}
+{?Results.show}
 <h1>
-Found {Results.show.length} show(s):
+    Found {Results.show.length} show(s) for "{query}":
 </h1>
 
 <ul>
     {#Results.show}
     <li data-id="{showid}">
+        <h2><a href="{link}" target="_blank">{name}</a></h2>
         <dl>
-            <dt>name</dt>
-            <dd>{name}</dd>
-
             <dt>status</dt>
             <dd>{status}</dd>
 
-            <dt>link</dt>
-            <dd><a href="{link}" target="_blank">{link}</a></dd>
+            <dt>Running period</dt>
+            <dd>{started} - {ended}</dd>
 
             <dt>genres</dt>
             <dd>
@@ -27,8 +30,16 @@ Found {Results.show.length} show(s):
             </dd>
         </dl>
     </li>
+    {:else}
+    <li>Search for something else...</li>
     {/Results.show}
 </ul>
+
+{:else}
+<h1>Found nothing for "{query}". :(</h1>
+{/Results.show}
+{/error}
+
 
 {! example ... 
 show [

@@ -9,23 +9,28 @@ var inspect = require('eyes').inspector();
 
 module.exports = (function() {
     return function(req, res) {
-        console.log('let us find %s', req.params.name);
+        process.stdout.write('Let us find "' + req.params.name + '" ');
         http.get('http://services.tvrage.com/feeds/search.php?show=' +
             req.params.name, function(httpres) {
                 var html = '';
+
                 httpres.on('data', function(chunk) {
+                    process.stdout.write('.');
                     html = html + chunk;
                 });
+
                 httpres.on('end', function() {
-                    console.log('html');
-                    console.log(html);
+                    process.stdout.write('\n');
                     xml2js.parseString(html, function(err, result) {
-                        console.log('err:');
-                        console.log(err);
+                        if (err) console.log('ERROR: %s', err);
+                        result.query = req.params.name;
                         inspect(result);
                         res.render('find', result);
                     });
                 });
+            }).on('error', function(e) {
+                console.log('ERROR: %s', e);
+                res.render('find', { error: e.message });
             });
     };
 });

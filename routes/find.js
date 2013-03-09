@@ -1,6 +1,6 @@
 /*
- * Uses this "API".
- * http://services.tvrage.com/info.php?page=main
+ * Uses RSS feeds from tvrage
+ *  http://services.tvrage.com/info.php?page=main
  */
 
 var http = require('http');

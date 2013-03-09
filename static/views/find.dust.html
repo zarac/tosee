@@ -1,0 +1,53 @@
+<h1>
+Found {Results.show.length} show(s):
+</h1>
+
+<ul>
+    {#Results.show}
+    <li data-id="{showid}">
+        <dl>
+            <dt>name</dt>
+            <dd>{name}</dd>
+
+            <dt>status</dt>
+            <dd>{status}</dd>
+
+            <dt>link</dt>
+            <dd><a href="{link}" target="_blank">{link}</a></dd>
+
+            <dt>genres</dt>
+            <dd>
+                {#genres}
+                <ul>
+                    {#genre}
+                    <li>{.}</li>
+                    {/genre}
+                </ul>
+                {/genres}
+            </dd>
+        </dl>
+    </li>
+    {/Results.show}
+</ul>
+
+{! example ... 
+show [
+    {
+    genres: [
+        {
+            genre: [ 'Action', 'Crime', 'Drama' ]
+        }
+    ],
+    link: [ 'http://www.tvrage.com/Person_of_Interest' ],
+    country: [ 'US' ],
+    name: [ 'Person of Interest' ],
+    started: [ '2011' ],
+    status: [ 'Returning Series' ],
+    seasons: [ '2' ],
+    ended: [ '0' ],
+    showid: [ '28376' ],
+    classification: [ 'Scripted' ]
+    },
+    ..
+]
+!}

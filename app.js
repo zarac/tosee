@@ -1,12 +1,12 @@
 /**
- * z-web-node
- *  A template for creating websites.
+ * To See
+ *  Helps you with what to watch.
  *
  * Author
  *  Hannes Landstedt a.k.a. zarac
  *
  * Home / Source
- *  https://github.com/zarac/z-web-node
+ *  https://github.com/zarac/tosee
  */
 
 
@@ -20,19 +20,20 @@ var express = require('express'),
     http = require('http'),
     path = require('path'),
     routes = require('./routes/main'),
+    api = require('./routes/api'),
+    find = require('./routes/find'),
     consolidate = require('consolidate'),
     mongodb = require('mongodb');
 
 
 //* Initialize database
-var db = new Object();
-process.db = new Object();
+var db = process.db = new Object();
 mongodb.MongoClient.connect('mongodb://localhost/z-to-see',
         function(err, con) {
     if (err) throw err;
     console.log('Connected to mongoDB.');
-    process.db.connection = con;
-    process.db.post = con.collection('post');
+    db._connection = con;
+    db.items = con.collection('items');
 });
 
 
@@ -61,6 +62,8 @@ app.configure('development', function() {
 
 //* Initialize web server routes
 app.get('/', routes.index());
+app.get('/find/:name', find());
+app.post('/api', api(db));
 
 
 //* Let's listen

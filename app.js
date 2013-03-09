@@ -33,7 +33,7 @@ mongodb.MongoClient.connect('mongodb://localhost/z-to-see',
     if (err) throw err;
     console.log('Connected to mongoDB.');
     db._connection = con;
-    db.items = con.collection('items');
+    db.show = con.collection('show');
 });
 
 
@@ -61,7 +61,7 @@ app.configure('development', function() {
 
 
 //* Initialize web server routes
-app.get('/', routes.index());
+app.get('/', routes.index(db));
 app.get('/find/:name', find());
 app.post('/api', api(db));
 

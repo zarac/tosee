@@ -1,5 +1,10 @@
-exports.index = function() {
+var inspect = require('eyes').inspector();
+
+exports.index = function(db) {
     return function(req, res) {
-        res.render('index');
+        db.show.find().toArray(function(err, shows) {
+            inspect(shows);
+            res.render('index', { shows: shows });
+        });
     };
 };

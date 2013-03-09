@@ -15,7 +15,16 @@
             <h1>What to see next?</h1>
         </header>
 
-        <section id="items">
+        <section id="shows">
+            <ul>
+                {#shows}
+                <li>
+                    {! TODO: specifying only show resolves to 'show.dust' as
+                        oppsed to 'show.dust.html' !}
+                    {>"show.dust.html":./}
+                </li>
+                {/shows}
+            </ul>
         </section>
 
         <footer>

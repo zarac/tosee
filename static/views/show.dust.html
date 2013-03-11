@@ -1,4 +1,7 @@
-<div class="show" data-id="{source.id}">
+<div class="show item" data-id="{source.id}">
     <h2 class="name">{name}</h2>
-    {>"source.dust.html":source/}
+    {>seasons:seasons/}
+    <button class="update button">Update</button>
+    <button class="remove button">Remove</button>
+    {>source:source/}
 </div>

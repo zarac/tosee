@@ -19,11 +19,13 @@ var WWW_HOST = process.env.WWW_HOST || '0.0.0.0';
 var express = require('express'),
     http = require('http'),
     path = require('path'),
+    consolidate = require('consolidate'),
+    mongodb = require('mongodb'),
     routes = require('./routes/main'),
     api = require('./routes/api'),
     find = require('./routes/find'),
-    consolidate = require('consolidate'),
-    mongodb = require('mongodb');
+    show = require('./routes/show'),
+    res_json = require('./lib/common').res_json;
 
 
 //* Initialize database
@@ -62,11 +64,25 @@ app.configure('development', function() {
 
 //* Initialize web server routes
 app.get('/', routes.index(db));
-app.get('/find/:name', find());
-app.post('/api', api(db));
+app.get('/find/:query', find());
+//* API routes
+app.get('/show/:id', show.main(db));
+app.get('/show/:id/remove', show.remove(db)); /// TODO RESTfulize
+app.get('/show/:id/update', show.update(db)); /// TODO RESTfulize
+app.post('/api', api(db)); /// TODO RESTfulize / remove
+//* Test stuff
+app.get('/addtestshows', function(req, res) {
+    var shows = [
+        { name: 'Person of Interest', source: { id: '28376' } },
+        { name: 'Big Bang Theory, The', source: { id: '8511' } }
+    ];
+    db.show.insert(shows, function() {
+        res_json(res, { status: 0 });
+    });
+});
 
 
 //* Let's listen
 http.createServer(app).listen(app.get('port'), app.get('host'), function() {
-  console.log("Express server listening on port " + app.get('port'));
+    console.log("Web server listening on port " + app.get('port'));
 });

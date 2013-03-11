@@ -12,6 +12,7 @@
     "consolidate": "0.8",
     "dustjs-linkedin": "1.1",
     "xml2js": "0.2",
-    "eyes": "0.1"
+    "eyes": "0.1",
+    "tvrager": "0.2"
   }
 }

@@ -1,0 +1,16 @@
+<div class="result">
+    {?shows}
+    <header>
+        Found {shows.length} show(s).
+    </header>
+    <ul>
+        {#shows}
+        <li>
+            <a href="{link}" target="_blank">{name}</a></br>
+        </li>
+        {/shows}
+    </ul>
+    {:else}
+    Haven't found anything yet...
+    {/shows}
+</div>

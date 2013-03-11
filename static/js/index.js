@@ -7,29 +7,70 @@ dust.onLoad = function(name, callback) {
     });
 };
 
-var ItemList = (function() {
-    var nextId = 1;
+var bind_find_button = function() {
+    $('#finder .find.button').on('click', function(e) {
+        e.preventDefault();
+        find($('#finder .query').val());
+    });
+};
 
-    return function(name) {
-        this.id = nextId++;
-        this.name = name || 'some list';
-        this.items = [];
-    };
-})();
+var bind_remove_buttons = function() {
+    $('.show.item').each(function(i, el) {
+        $(this).find('.remove.button').on('click', function(e) {
+            remove_show($(el).data('id'));
+        });
+    });
+};
 
-ItemList.prototype.add = function(item) {
-    this.items.push(item);
+var bind_update_buttons = function() {
+    $('.show.item').each(function(i, el) {
+        $(this).find('.update.button').on('click', function(e) {
+            update_show($(el).data('id'));
+        });
+    });
+};
+
+var find = function(query) {
+    $.get('/find/' + query, function(result) {
+        console.log(result);
+        dust.render('finder-result', result.result, function(err, out) {
+            $('#finder .result').replaceWith(err || out);
+        });
+    });
+}
+
+var remove_show = function(id) {
+    feedback('removing le show ' + id);
+    $.get('show/' + id + '/remove', function(res) {
+        if (res.error) feedback(res.error);
+        else {
+            $('.show.item[data-id='+id+']').remove();
+        }
+    });
+};
+
+var update_show = function(id) {
+    feedback('updating le show ' + id);
+    $.get('show/' + id + '/update', function(res) {
+        if (res.error) feedback(res.error);
+        else {
+            dust.render('show', res, function(err, out) { 
+                var e = $('.show.item[data-id='+id+']');
+                e.replaceWith(err || out);
+            });
+        }
+    });
 };
 
 $(function() {
-    var items = new ItemList();
-    items.add({name: 'another item'});
-    items.add({name: 'a secret'});
-    feedback(items);
+    bind_find_button();
+    bind_remove_buttons();
+    bind_update_buttons();
 
-    var items2 = new ItemList('the best list ever');
-    items2.add({name: 'blueberry'});
-    items2.add({name: 'yum'});
-    items2.add({name: 'yum'});
-    feedback(items2);
+    //* dev help / testing
+    $('#dev .add-test-shows.button').on('click', function() {
+        $.get('addtestshows', function(res) {
+            feedback(res);
+        });
+    });
 });

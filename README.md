@@ -1,11 +1,13 @@
 # ToSee
 Helps you with what to watch next.
 
+
 ## Prerequisites
 * [git][]
 * [mongoDB][]
 * [Node.js][]
 * [npm][]
+
 
 ## Install & Run
     git clone https://github.com/zarac/tosee.git
@@ -13,11 +15,24 @@ Helps you with what to watch next.
     npm install
     npm start
 
+
+## Issues
+* Seems there's a bug in either dust.js or perhaps express. Template names for
+  partials are not resolving paths correctly. I've specified my template
+  endings to foo.dust.html, and it works for rendering through javascript, but
+  for partials they resolve to foo.dust. This only happens on server side,
+  suggesting it's actually a express bug (or even misconfiguration).  Possible
+  "solutions" include: use mere .dust endings, create symbolic links for all
+  templates from *.dust.html to *.dust, fix bug / misconfiguration.
+
+
 ## Author
 Hannes Landstedt a.k.a. zarac
 
+
 ## Source
 https://github.com/zarac/tosee.git
+
 
 ## License
 [NULL (No Unnecessary License - License)][NULL]

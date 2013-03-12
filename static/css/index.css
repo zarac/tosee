@@ -1,5 +1,38 @@
 @import url(http://fonts.googleapis.com/css?family=Domine);
 
 body {
-  font-family: 'Domine', serif;
+    background-color: #EEEEEE;
+    font-family: 'Domine', serif;
+    text-align: center;
+}
+
+ul { list-style: none; }
+
+ul, li {
+    margin: 5px;
+    padding: 5px
+}
+
+body > header {
+}
+
+#shows .episodes ul,
+#finder .result ul {
+  display: inline-block;
+  min-width: 40em;
+  text-align: left;
+}
+
+#shows .show.item {
+    background-color: #FFFFFF;
+    border-radius: 2em;
+    margin: 1em;
+    padding: 1em;
+}
+
+#finder {
+    margin-top: 10em;
+    margin-bottom: 10em;
+    padding-top: 5em;
+    padding-bottom: 5em;
 }

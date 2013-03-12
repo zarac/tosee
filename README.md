@@ -10,10 +10,15 @@ Helps you with what to watch next.
 
 
 ## Install & Run
-    git clone https://github.com/zarac/tosee.git
-    cd tosee
-    npm install
-    npm start
+```
+git clone https://github.com/zarac/tosee.git
+cd tosee
+npm install
+pushd static/views; sh symlinkall.sh; popd
+npm start
+```
+_**NOTE**: The `.. sh symlinkall.sh ..` step is only a temporary work-around
+for the issue described below._
 
 
 ## Issues

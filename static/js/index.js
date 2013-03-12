@@ -7,6 +7,20 @@ dust.onLoad = function(name, callback) {
     });
 };
 
+var add_show = function(id, cb) {
+    feedback('adding show '+id);
+    $.get('/show/' + id + '/add', function(res) {
+        if (res.error) feedback(res.error);
+        else {
+            res._li = true;
+            dust.render('show', res, function(err, out) {
+                $('#shows .list').append(out);
+            });
+        }
+        if (cb) cb(res);
+    });
+};
+
 var bind_find_button = function() {
     $('#finder .find.button').on('click', function(e) {
         e.preventDefault();
@@ -32,9 +46,16 @@ var bind_update_buttons = function() {
 
 var find = function(query) {
     $.get('/find/' + query, function(result) {
-        console.log(result);
         dust.render('finder-result', result.result, function(err, out) {
+            var out = $(out);
             $('#finder .result').replaceWith(err || out);
+            out.find('.result.item').each(function() {
+                var item = $(this),
+                    id = item.data('id');
+                item.find('.add.button').on('click', function(e) {
+                    add_show(id);
+                });
+            });
         });
     });
 }

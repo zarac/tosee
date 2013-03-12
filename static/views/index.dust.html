@@ -15,23 +15,9 @@
             <h1>What to see next?</h1>
         </header>
 
-        <section id="shows">
-            <ul>
-                {#shows}
-                <li>
-                    {! TODO: specifying only show resolves to 'show.dust' as
-                        oppsed to 'show.dust.html' !}
-                    {>"show.dust.html":./}
-                </li>
-                {/shows}
-            </ul>
-        </section>
+        {>shows:shows/}
 
         {>finder/}
-
-        <section id="dev">
-            <button class="add-test-shows button">Add test shows</button>
-        </section>
 
         <footer>
             See <a href="https://dev.zarac.se/tosee">dev.zarac.se/tosee</a> for more.

@@ -66,10 +66,12 @@ app.configure('development', function() {
 app.get('/', routes.index(db));
 app.get('/find/:query', find());
 //* API routes
+//* TODO RESTfulize
 app.get('/show/:id', show.main(db));
-app.get('/show/:id/remove', show.remove(db)); /// TODO RESTfulize
-app.get('/show/:id/update', show.update(db)); /// TODO RESTfulize
-app.post('/api', api(db)); /// TODO RESTfulize / remove
+app.get('/show/:id/add', show.add(db));
+app.get('/show/:id/remove', show.remove(db));
+app.get('/show/:id/update', show.update(db));
+app.post('/api', api(db));
 //* Test stuff
 app.get('/addtestshows', function(req, res) {
     var shows = [

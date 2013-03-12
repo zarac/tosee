@@ -3,10 +3,15 @@
         <header>
             Found {shows.length} show(s).
         </header>
-        <ul>
+        <ul class="list">
             {#shows}
-                <li>
-                    <a href="{link}" target="_blank">{name}</a></br>
+                <li class="result item" data-id="{showid}">
+                    <button class="add button">Add</button>
+                    {~s}<a href="{link}" target="_blank">{name}</a>
+                    {~s}: {country}
+                    {~s}: {seasons} seasons
+                    {~s}: {started} - {ended}
+                    {~s}: {status}
                 </li>
             {/shows}
         </ul>

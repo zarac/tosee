@@ -1,19 +1,19 @@
-<div class="result">
+<section class="result">
     {?shows}
         <header>
             Found {shows.length} show(s).
         </header>
-        <ul class="list">
+        <section class="items list">
             {#shows}
-                <li class="result item" data-id="{showid}">
+                <article class="result item" data-id="{showid}">
                     <button class="add button">Add</button>
                     {~s}<a href="{link}" target="_blank">{name}</a>
                     {~s}: {country}
                     {~s}: {seasons} seasons
                     {~s}: {started} - {ended}
                     {~s}: {status}
-                </li>
+                </article>
             {/shows}
-        </ul>
+        </section>
     {/shows}
-</div>
+</section>

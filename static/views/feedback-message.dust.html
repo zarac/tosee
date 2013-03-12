@@ -1,6 +1,8 @@
-<li class="feedback item {type}" data-id="{id}" {?type}data-type="{type}"{/type}>
+<article class="feedback item {type}" data-id="{id}" {?type}data-type="{type}"{/type}>
     {?title}
-    <h1 class="title">{title}</h1>
+    <header>
+        <span class="title">{title}</span>
+    </header>
     {/title}
     <p class="message">{message}</p>
-</li>
+</article>

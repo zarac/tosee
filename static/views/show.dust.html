@@ -1,6 +1,7 @@
-{?_li} <li> {/_li}
-<div class="show item" data-id="{showid}">
-    <h2 class="name"><a href="{showlink}" target="_blank">{showname}</a></h2>
+<article class="show item" data-id="{showid}">
+    <header>
+        <span class="name"><a href="{showlink}" target="_blank">{showname}</a></span>
+    </header>
     <span class="started">{startdate}</span> - <span class="ended">{ended}</span>
     {?airday}
     <div class="airs">
@@ -15,5 +16,4 @@
     <button class="update button">Update</button>
     <button class="remove button">Remove</button>
     {>seasons:seasons/}
-</div>
-{?_li} </li> {/_li}
+</article>

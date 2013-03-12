@@ -4,20 +4,29 @@ body {
     background-color: #EEEEEE;
     font-family: 'Domine', serif;
     text-align: center;
+    /*font-size: 1.2em;*/
 }
 
-ul { list-style: none; }
-
-ul, li {
-    margin: 5px;
-    padding: 5px
+header {
+    font-size: 1.3em;
+    margin: 1.01em;
 }
 
-body > header {
+button {
+    visibility: hidden;
 }
 
-#shows .episodes ul,
-#finder .result ul {
+article:hover button {
+    visibility: visible;
+}
+
+.seasons article,
+.episodes article {
+    margin: 1.2em;
+}
+
+#shows .episodes.list,
+#finder .result .items.list {
   display: inline-block;
   min-width: 40em;
   text-align: left;

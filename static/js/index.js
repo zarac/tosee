@@ -14,7 +14,9 @@ var add_show = function(id, cb) {
         else {
             res._li = true;
             dust.render('show', res, function(err, out) {
-                $('#shows .list').append(out);
+                out = $(out);
+                $('#shows > .list').append(out);
+                scrollTo(out);
             });
         }
         if (cb) cb(res);
@@ -95,3 +97,12 @@ $(function() {
         });
     });
 });
+
+function scrollTo(element) {
+    $("html, body").stop().animate({ scrollTop: element.offset().top - 5 },
+            1000)
+    $(element).addClass('animated pulse')
+    window.setTimeout(function() {
+        $(element).removeClass('pulse')
+    }, 1000)
+}

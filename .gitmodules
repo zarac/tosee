@@ -1,0 +1,3 @@
+[submodule "static/css/animate.css"]
+	path = static/css/animate.css
+	url = https://github.com/daneden/animate.css.git

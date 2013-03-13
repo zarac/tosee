@@ -13,6 +13,6 @@
     "dustjs-linkedin": "1.1",
     "xml2js": "0.2",
     "eyes": "0.1",
-    "tvrager": ">=0.3.2"
+    "tvrager": "0.4"
   }
 }

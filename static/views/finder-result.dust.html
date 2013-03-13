@@ -5,11 +5,11 @@
         </header>
         <section class="items list">
             {#shows}
-                <article class="result item" data-id="{showid}">
+                <article class="result item" data-id="{id}">
                     <button class="add button">Add</button>
-                    {~s}<a href="{link}" target="_blank">{name}</a>
+                    {~s}<a href="{url}" target="_blank">{name}</a>
                     {~s}: {country}
-                    {~s}: {seasons} seasons
+                    {~s}: {seasoncount} seasons
                     {~s}: {started} - {ended}
                     {~s}: {status}
                 </article>

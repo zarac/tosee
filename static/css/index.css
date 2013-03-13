@@ -45,6 +45,10 @@ article:hover button {
     padding: 1em;
 }
 
+.episode.item .links {
+    text-align: center;
+}
+
 #finder {
     margin-top: 10em;
     margin-bottom: 10em;

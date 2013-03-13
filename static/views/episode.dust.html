@@ -1,7 +1,15 @@
 <article class="episode item">
     <header>
-        <span class="number">{seasonnum} - </span>
-        <span class="title"> <a href="{url}" target="_blank">{title}</a> </span>
+        <span class="number">{number}</span> -{~s}
+        <span class="title"><a href="{url}" target="_blank">{title}</a></span>
     </header>
-    <span class="airdate"> Air date : {airdate} </span>
+    Air date : <span class="airdate">{airdate}</span>
+    <br/>
+    <div class="links">
+        <span class="tpb">
+            <a href="http://thepiratebay.se/search/{showname} {eid}" target="_blank">
+                <img src="img/tpb-cassette.png" alt="tpb cassette" />
+            </a>
+        </span>
+    </div>
 </article>

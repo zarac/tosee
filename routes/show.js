@@ -48,7 +48,7 @@ module.exports.main = function(db) {
 
 module.exports.remove = function(db) {
     return function(req, res) {
-        db.show.remove({ 'showid': req.params.id }, function(err, numRemoved) {
+        db.show.remove({ 'id': req.params.id }, function(err, numRemoved) {
             if (!numRemoved == 1) console.log('WARNING: Did not remove anything.');
             res_json(res, { status: 0 });
         });
@@ -58,7 +58,7 @@ module.exports.remove = function(db) {
 //* TODO: clean
 module.exports.update = function(db) {
     return function(req, res) {
-        db.show.findOne({ 'showid': req.params.id }, function(err, doc) {
+        db.show.findOne({ 'id': req.params.id }, function(err, doc) {
             if (err) {
                 res_json(res, { error: err })
                 return;
@@ -72,13 +72,13 @@ module.exports.update = function(db) {
                         res_json(res, episodes);
                         return;
                     }
-                    db.show.update({ 'showid': req.params.id }, { $set: {
+                    db.show.update({ 'id': req.params.id }, { $set: {
                         seasons: episodes.seasons } }, function(err,
                                      updateCount) {
                             if (err)
                                 console.log('ERROR: Failing to update database record (%s).', err);
                             else if (updateCount == 1) {
-                                db.show.findOne({ 'showid': req.params.id }, function(err, doc) {
+                                db.show.findOne({ 'id': req.params.id }, function(err, doc) {
                                     if (err) res_json(res, { error: err });
                                     else if (!doc) res_json(res, { error: 'found nothing' });
                                     else res_json(res, doc);

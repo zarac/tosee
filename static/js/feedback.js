@@ -20,12 +20,14 @@ var feedback = (function(defaultType) {
     var main = preinit = function(message) {
         console.log('feedback not initialized. message queued (id=%s)', message.id);
         queue.push(message);
+        return message;
     };
 
     var postinit = function(message) {
         dust.render('feedback-message', message, function(err, out) {
             $('#feedback .list').append(out);
         });
+        return message;
     };
 
     var unify_message = function(message) {

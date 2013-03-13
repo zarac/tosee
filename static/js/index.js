@@ -8,17 +8,22 @@ dust.onLoad = function(name, callback) {
 };
 
 var show_add = function(id, cb) {
-    feedback('adding show '+id);
+    var fid = feedback('adding show '+id).id;
     $.get('/show/' + id + '/add', function(res) {
         if (res.error) feedback(res.error);
         else {
-            res._li = true;
+            if (res.seasons)
+                for (var j = 0; j < res.seasons.length; j++)
+                    if (res.seasons[j].episodes)
+                        for (var k = 0; k < res.seasons[j].episodes.length; k++)
+                            res.seasons[j].episodes[k].showname = res.name;
             dust.render('show', res, function(err, out) {
                 out = $(out);
                 $('#shows > .list').append(out);
                 scrollTo(out);
             });
         }
+        $('.feedback.item[data-id='+fid+']').remove();
         if (cb) cb(res);
     });
 };
@@ -32,25 +37,32 @@ var show_find = function(query) {
 };
 
 var show_remove = function(id) {
-    feedback('removing le show ' + id);
+    var fid = feedback('removing le show ' + id).id;
     $.get('show/' + id + '/remove', function(res) {
         if (res.error) feedback(res.error);
         else {
             $('.show.item[data-id='+id+']').remove();
         }
+        $('.feedback.item[data-id='+fid+']').remove();
     });
 };
 
 var show_update = function(id) {
-    feedback('updating le show ' + id);
+    var fid = feedback('updating le show ' + id).id;
     $.get('show/' + id + '/update', function(res) {
         if (res.error) feedback(res.error);
         else {
+            if (res.seasons)
+                for (var j = 0; j < res.seasons.length; j++)
+                    if (res.seasons[j].episodes)
+                        for (var k = 0; k < res.seasons[j].episodes.length; k++)
+                            res.seasons[j].episodes[k].showname = res.name;
             dust.render('show', res, function(err, out) { 
                 var e = $('.show.item[data-id='+id+']');
                 e.replaceWith(err || out);
             });
         }
+        $('.feedback.item[data-id='+fid+']').remove();
     });
 };
 

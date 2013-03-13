@@ -7,7 +7,7 @@ dust.onLoad = function(name, callback) {
     });
 };
 
-var add_show = function(id, cb) {
+var show_add = function(id, cb) {
     feedback('adding show '+id);
     $.get('/show/' + id + '/add', function(res) {
         if (res.error) feedback(res.error);
@@ -23,46 +23,15 @@ var add_show = function(id, cb) {
     });
 };
 
-var bind_find_button = function() {
-    $('#finder .find.button').on('click', function(e) {
-        e.preventDefault();
-        find($('#finder .query').val());
-    });
-};
-
-var bind_remove_buttons = function() {
-    $('.show.item').each(function(i, el) {
-        $(this).find('.remove.button').on('click', function(e) {
-            remove_show($(el).data('id'));
-        });
-    });
-};
-
-var bind_update_buttons = function() {
-    $('.show.item').each(function(i, el) {
-        $(this).find('.update.button').on('click', function(e) {
-            update_show($(el).data('id'));
-        });
-    });
-};
-
-var find = function(query) {
+var show_find = function(query) {
     $.get('/find/' + query, function(result) {
         dust.render('finder-result', result.result, function(err, out) {
-            var out = $(out);
             $('#finder .result').replaceWith(err || out);
-            out.find('.result.item').each(function() {
-                var item = $(this),
-                    id = item.data('id');
-                item.find('.add.button').on('click', function(e) {
-                    add_show(id);
-                });
-            });
         });
     });
-}
+};
 
-var remove_show = function(id) {
+var show_remove = function(id) {
     feedback('removing le show ' + id);
     $.get('show/' + id + '/remove', function(res) {
         if (res.error) feedback(res.error);
@@ -72,7 +41,7 @@ var remove_show = function(id) {
     });
 };
 
-var update_show = function(id) {
+var show_update = function(id) {
     feedback('updating le show ' + id);
     $.get('show/' + id + '/update', function(res) {
         if (res.error) feedback(res.error);
@@ -85,17 +54,37 @@ var update_show = function(id) {
     });
 };
 
-$(function() {
-    bind_find_button();
-    bind_remove_buttons();
-    bind_update_buttons();
+//* Event handlers
+var on_show_add = function() {
+    var show = $(this).parent('.result.item');
+    show_add(show.data('id'));
+};
 
-    //* dev help / testing
-    $('#dev .add-test-shows.button').on('click', function() {
-        $.get('addtestshows', function(res) {
-            feedback(res);
-        });
-    });
+var on_show_find = function(e) {
+    e.preventDefault();
+    show_find($('#finder .query').val());
+};
+
+var on_show_remove = function() {
+    var show = $(this).parent('.show.item');
+    show_remove(show.data('id'));
+}
+
+var on_show_update = function() {
+    var show = $(this).parent('.show.item');
+    show_update(show.data('id'));
+}
+
+var on_toggle = function() {
+    $(this).parent().children('.toggable').toggle();
+};
+
+$(function() {
+    $('body').on('click', '.toggler', on_toggle);
+    $('#finder').on('click', '.add.button', on_show_add);
+    $('#finder').on('click', '.find.button', on_show_find);
+    $('#shows').on('click', '.show.item .remove.button', on_show_remove);
+    $('#shows').on('click', '.show.item .update.button', on_show_update);
 });
 
 function scrollTo(element) {

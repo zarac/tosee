@@ -1,7 +1,10 @@
 {?.}
 <section class="seasons list">
-    {#.}
-        {>season:./}
-    {/.}
+    <button class="toggler">Seasons</button>
+    <div class="toggable{^visible} hidden{/visible}">
+        {#.}
+            {>season:./}
+        {/.}
+    </div>
 </section>
 {/.}

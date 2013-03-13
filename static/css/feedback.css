@@ -9,25 +9,28 @@
     padding: 5px;
     border-radius: 5px;
     box-shadow: 5px;
-    border: 1px solid #810401;
 }
 
 .feedback.error {
+    border: 1px solid #FF5555;
     color: #FF5555;
 }
 
 .feedback.info {
+    border: 1px solid #5555FF;
     color: #5555FF;
 }
 
-.feedback .message {
-    color: #38051f;
-}
-
 .feedback.success {
+    border: 1px solid #55FF55;
     color: #55FF55;
 }
 
 .feedback.warning {
+    border: 1px solid #FFFF55;
     color: #FFFF55;
+}
+
+.feedback .message {
+    color: #38051F;
 }

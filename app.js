@@ -96,10 +96,7 @@ db.connect(db_url, function onConnected(con) {
         console.log('web server listening [ ' + www_url + ' ]');
         db.log.insert({ status: 'all ok', db: db_url, www: www_url },
             function(err, doc) {
-                console.log('err');
-                console.eyes(err);
-                console.log('doc');
-                console.eyes(doc);
+                if (err) console.log('ERROR: ', err);
             });
     });
 });

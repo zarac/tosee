@@ -39,3 +39,7 @@
 .feedback .message {
     color: #38051F;
 }
+
+article.feedback menu {
+    float: right;
+}

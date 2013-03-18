@@ -24,7 +24,9 @@ var feedback = (function(defaultType) {
 
     var postinit = function(message) {
         dust.render('feedback-message', message, function(err, out) {
+            var out = $(out);
             $('#feedback .list').append(out);
+            //* TODO remove after X time (only success and info)
         });
         return message;
     };
@@ -64,9 +66,10 @@ var feedback = (function(defaultType) {
 
     feedback.init = function(callback) {
         dust.render('feedback', {}, function(err, out) {
+            var out = $(out);
             $('body').append(out);
-            while (queue.length > 0) postinit(queue.shift());
             main = postinit;
+            while (queue.length > 0) postinit(queue.shift());
             callback();
         });
     };
@@ -87,11 +90,16 @@ var feedback = (function(defaultType) {
         main({ type: 'warning', message: message });
     };
 
+    feedback.close = function(e) {
+        $(e.target).parents('article').remove();
+    };
+
     return feedback;
 })('info');
 
 $(function() {
     feedback.init(function() {
+        $('#feedback').on('click', '.button.close', feedback.close);
         /* Test
         feedback('testing string');
         feedback({ message: 'testing obj.message' });

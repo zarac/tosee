@@ -1,6 +1,6 @@
 /**
  * To See
- *  Helps you with what to watch.
+ *  Helps you with what to watch next.
  *
  * Author
  *  Hannes Landstedt a.k.a. zarac
@@ -10,81 +10,96 @@
  */
 
 
-//* Environment
-var WWW_PORT = process.env.WWW_PORT || 3000;
-var WWW_HOST = process.env.WWW_HOST || '0.0.0.0';
+/**
+ * debug help
+ */
+console.eyes = require('eyes').inspector({ maxLength: 0 });
+console.Zerror = function(err) {
+    err.stack = err.stack.split('\n');
+    console.eyes(err);
+};
+console.Zkeys = function(obj) {
+    var keys = { };
+    for (var key in obj)
+        if (obj.hasOwnProperty(key))
+            keys[key] = key;
+    console.eyes(keys);
+};
 
 
-//* Load modules
-var express = require('express'),
-    http = require('http'),
-    path = require('path'),
-    consolidate = require('consolidate'),
-    mongodb = require('mongodb'),
-    routes = require('./routes/main'),
-    api = require('./routes/api'),
+/**
+ * config
+ */
+var db_url = process.env.CC_DB_URL || 'mongodb://localhost/z-to-see',
+    www_url = process.env.CC_WWW_URL || 'http://0.0.0.0:3000';
+
+
+/**
+ * database
+ * <
+ *  db_config
+ */
+var _db = require('./lib/database');
+var db_config = {
+    url: db_url,
+    models: {
+        log: { },
+        seen: { },
+        show: {
+            id: /[a-z0-9]/,
+            name: 'Unnamed Show'
+        },
+        user: {
+            id: 0,
+            name: 'J. Random Watcher'
+        }
+    }
+};
+var db = new _db.Database(db_config);
+
+
+/**
+ * web server
+ * <
+ *  db
+ *  www_config
+ */
+var _www = require('./lib/webserver'),
+    _path = require('path');
+var config = {
+    url: www_url,
+    views: _path.join(__dirname, '/static/views'),
+    static: _path.join(__dirname, '/static')
+};
+var www = new _www.WebServer(db, config),
+    index = require('./routes/index'),
     find = require('./routes/find'),
-    show = require('./routes/show'),
-    res_json = require('./lib/common').res_json;
-
-
-//* Initialize database
-var db = process.db = new Object();
-mongodb.MongoClient.connect('mongodb://localhost/z-to-see',
-        function(err, con) {
-    if (err) throw err;
-    console.log('Connected to mongoDB.');
-    db._connection = con;
-    db.show = con.collection('show');
-});
-
-
-//* Initialize web server
-var app = express();
-
-app.engine('dust.html', consolidate.dust);
-
-app.configure(function() {
-    app.set('port', WWW_PORT);
-    app.set('host', WWW_HOST);
-    app.set('views', __dirname + '/static/views');
-    app.set('view engine', 'dust.html');
-    app.use(express.favicon());
-    app.use(express.logger('dev'));
-    app.use(express.bodyParser());
-    app.use(express.methodOverride());
-    app.use(app.router);
-    app.use(express.static(path.join(__dirname, 'static')));
-});
-
-app.configure('development', function() {
-    app.use(express.errorHandler());
-});
-
-
-//* Initialize web server routes
-app.get('/', routes.index(db));
-app.get('/find/:query', find());
+    show = require('./routes/show');
+//* HTML5 routes
+www.route.get('/', index.html5(db));
 //* API routes
-//* TODO RESTfulize
-app.get('/show/:id', show.main(db));
-app.get('/show/:id/add', show.add(db));
-app.get('/show/:id/remove', show.remove(db));
-app.get('/show/:id/update', show.update(db));
-app.post('/api', api(db));
-//* Test stuff
-app.get('/addtestshows', function(req, res) {
-    var shows = [
-        { name: 'Person of Interest', source: { id: '28376' } },
-        { name: 'Big Bang Theory, The', source: { id: '8511' } }
-    ];
-    db.show.insert(shows, function() {
-        res_json(res, { status: 0 });
+www.route.get('/find', find());
+//www.route.post('/find/:query', find());
+www.route.get('/show/:id', show.main(db));
+www.route.get('/show/:id/add', show.add(db));
+www.route.get('/show/:id/remove', show.remove(db));
+www.route.get('/show/:id/update', show.update(db));
+www.route.get('/show/:sid/episode/:eid/toggleseen', show.toggle_seen(db));
+
+
+/**
+ * run
+ */
+db.connect(db_url, function onConnected(con) {
+    console.log('connectd to database [ ' + db_url + ' ]');
+    www.listen(www_url, function onListening(o) {
+        console.log('web server listening [ ' + www_url + ' ]');
+        db.log.insert({ status: 'all ok', db: db_url, www: www_url },
+            function(err, doc) {
+                console.log('err');
+                console.eyes(err);
+                console.log('doc');
+                console.eyes(doc);
+            });
     });
-});
-
-
-//* Let's listen
-http.createServer(app).listen(app.get('port'), app.get('host'), function() {
-    console.log("Web server listening on port " + app.get('port'));
 });

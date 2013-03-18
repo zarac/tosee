@@ -1,6 +1,7 @@
 @import url(http://fonts.googleapis.com/css?family=Domine);
 
 body {
+    background: url('../img/subtlepatterns/natural_paper.png');
     background-color: #EEEEEE;
     font-family: 'Domine', serif;
     margin-bottom: 10em;
@@ -15,13 +16,45 @@ header {
     margin: 1.01em;
 }
 
-button {
+article > menu {
     visibility: hidden;
+    padding: 0px;
+    text-align: center;
 }
 
-article:hover button {
+article > menu > * {
+    /*display: list-item;*/
+}
+
+article:hover > menu {
     visibility: visible;
 }
+
+a {
+    color: #009;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #009;
+    text-decoration: underline;
+}
+
+.toggle { cursor: pointer; }
+
+.button {
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 3px rgba(255, 255, 255, 0.59);
+    background-color: rgba(125, 106, 202, 0.24);
+    border: 2px solid rgba(118, 130, 192, 0.73);
+    /*box-shadow: 0px 0px 11px 1px rgb(190, 198, 255);*/
+    cursor: pointer;
+    padding: 2px 4px;
+}
+
+.big { zoom: 1.5; }
+.bigger { zoom: 1.8; }
+.biggest { zoom: 3.0; }
 
 .hidden { display: none; }
 
@@ -32,21 +65,47 @@ article:hover button {
 
 #shows .episodes.list,
 #finder .result .items.list {
-  display: inline-block;
-  min-width: 40em;
-  text-align: left;
+    display: inline-block;
+    min-width: 40em;
+    text-align: left;
 }
 
-#shows .show.item {
-    background-color: #FFFFFF;
+#shows .episodes.list menu,
+#finder .result .items.list menu {
+    text-align: center;
+}
+
+article.show {
+    background-color: rgba(249, 255, 100, 0.16);
     border: 1px solid rgb(167, 167, 167);
     border-radius: 2em;
+    margin: 5em;
+    padding: 1em;
+}
+
+article.episode {
     margin: 1em;
     padding: 1em;
 }
 
-.episode.item .links {
+article.episode .links {
     text-align: center;
+}
+
+article.episode[data-status="seen"] header .number {
+    color: rgba(85, 255, 85, 0.85);
+}
+
+article.show[data-status="unseen"],
+article.season[data-status="unseen"],
+article.episode[data-status="unseen"] {
+    background-color: rgba(255, 85, 85, 0.1);
+    border: 2px solid rgba(255, 85, 85, 0.40);
+    border-radius: 1em;
+}
+
+article.episode[data-status="unseen"] header .number {
+    color: rgba(255, 85, 85, 0.85);
 }
 
 #finder {
@@ -54,4 +113,8 @@ article:hover button {
     margin-bottom: 10em;
     padding-top: 5em;
     padding-bottom: 5em;
+}
+
+#finder .query {
+    text-align: center;
 }

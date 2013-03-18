@@ -1,6 +1,14 @@
-<article class="season" data-number="{number}">
-    <header>
-        Season {number}
+<article class="season" data-id="{.number}">
+    <header class="clickable toggle" data-toggle=".episodes" data-state="true">
+        Season
+        {~s}
+        <span class="number">
+            {.number}
+        </span>
     </header>
-    {>episodes:episodes/}
+    <a href="http://thepiratebay.se/search/{#show}{name}{/show} season {.number}"
+        target="_blank">
+        <img src="img/tpb-cassette.png" alt="TPB" />
+    </a>
+    {>episodes/}
 </article>

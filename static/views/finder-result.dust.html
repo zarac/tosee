@@ -1,19 +1,37 @@
 <section class="result">
-    {?shows}
+    {?query}
         <header>
-            Found {shows.length} show(s).
+            {?error}
+                An error occured. Please try again.
+                <small>
+                    [{error}]
+                </small>
+            {:else}
+                Found {result.shows.length} show(s) for '{query}'.
+            {/error}
         </header>
-        <section class="items list">
-            {#shows}
-                <article class="result item" data-id="{id}">
-                    <button class="add button">Add</button>
-                    {~s}<a href="{url}" target="_blank">{name}</a>
-                    {~s}: {country}
-                    {~s}: {seasoncount} seasons
-                    {~s}: {started} - {ended}
-                    {~s}: {status}
-                </article>
-            {/shows}
-        </section>
-    {/shows}
+        {?result.shows}
+            <section class="items list">
+                {#result.shows}
+                    <article class="result item" data-id="{id}">
+                        <a href="/show/{id}/add" class="add button">
+                            Add
+                        </a>
+                        {~s}
+                        <a href="{url}" target="_blank">
+                            {name}
+                        </a>
+                        {~s}:{~s}
+                        {country}
+                        {~s}:{~s}
+                        {seasoncount} seasons
+                        {~s}:{~s}
+                        {started} - {ended}
+                        {~s}:{~s}
+                        {status}
+                    </article>
+                {/result.shows}
+            </section>
+        {/result.shows}
+    {/query}
 </section>

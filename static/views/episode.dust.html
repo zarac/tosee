@@ -1,15 +1,34 @@
-<article class="episode item">
+<article class="episode" data-id="{.eid}"
+    data-status="{?.seen}seen{:else}unseen{/.seen}">
     <header>
-        <span class="number">{number}</span> -{~s}
-        <span class="title"><a href="{url}" target="_blank">{title}</a></span>
+        <span class="number">
+            {.number}
+        </span>
+        {~s}-{~s}
+        <a href="{.url}" target="_blank">
+            <span class="title">
+                {.title}
+            </span>
+        </a>
     </header>
-    Air date : <span class="airdate">{airdate}</span>
-    <br/>
-    <div class="links">
-        <span class="tpb">
-            <a href="http://thepiratebay.se/search/{showname} {eid}" target="_blank">
-                <img src="img/tpb-cassette.png" alt="tpb cassette" />
-            </a>
+
+    <menu>
+        <a href="{_.url}/show/{#show}{id}{/show}/episode/{.eid}/toggleseen"
+            class="toggle-seen seen button">
+            {?.seen}unseen{:else}seen{/.seen}
+        </a>
+        {~s}
+        <a href="http://thepiratebay.se/search/{#show}{name}{/show} {.eid}"
+            target="_blank">
+            <img src="img/tpb-cassette.png" alt="TPB" />
+        </a>
+    </menu>
+
+    <div class="airs">
+        Air date :
+        {~s}
+        <span class="airdate">
+            {.airdate}
         </span>
     </div>
 </article>

@@ -1,6 +1,4 @@
-var http = require('http'),
-    tvrager = require('tvrager'),
-    eyes = require('eyes').inspector(),
+var tvrager = require('tvrager'),
     res_json = require('../lib/common').res_json;
 
 
@@ -51,6 +49,42 @@ module.exports.remove = function(db) {
         db.show.remove({ 'id': req.params.id }, function(err, numRemoved) {
             if (!numRemoved == 1) console.log('WARNING: Did not remove anything.');
             res_json(res, { status: 0 });
+        });
+    }
+};
+
+module.exports.toggle_seen = function(db) {
+    return function(req, res) {
+        var q = { id: req.params.sid };
+        db.show.findOne(q, function(err, doc) {
+            if (err) res_json(res, { error: err });
+            else if (!doc) res_json(res, { error: 'No such show.' });
+            else {
+                if (!doc.seasons)
+                    res_json(res, { error: 'No seasons.' });
+                else {
+                    var episode;
+                    for (var i = 0; i < doc.seasons.length; i++) {
+                        for (var j = 0; j < doc.seasons[i].episodes.length; j++) {
+                            if (doc.seasons[i].episodes[j].eid == req.params.eid) {
+                                episode = doc.seasons[i].episodes[j]
+                                if (doc.seasons[i].episodes[j].seen)
+                                    delete(doc.seasons[i].episodes[j].seen);
+                                else
+                                    doc.seasons[i].episodes[j].seen = true;
+                            }
+                        };
+                    };
+                    db.show.update(q, { $set: { seasons: doc.seasons } },
+                        function(err, count) {
+                            if (err) res_json(res, { error: err });
+                            else {
+                                episode.show = { id: doc.id, name: doc.name };
+                                res_json(res, episode);
+                            }
+                        });
+                }
+            }
         });
     }
 };

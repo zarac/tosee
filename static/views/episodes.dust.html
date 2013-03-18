@@ -1,5 +1,7 @@
-<section class="episodes list">
-    {#.}
-        {>episode:./}
-    {/.}
+{?episodes}
+<section class="episodes">
+    {#episodes season=.}
+        {>episode/}
+    {/episodes}
 </section>
+{/episodes}

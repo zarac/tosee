@@ -1,19 +1,55 @@
-<article class="show item" data-id="{id}">
+<article class="show" data-id="{.id}">
     <header>
-        <span class="name"><a href="{url}" target="_blank">{name}</a></span>
+        <a href="{.url}" target="_blank">
+            <span class="name">
+                {.name}
+            </span>
+        </a>
     </header>
-    <span class="started">{startdate}</span> - <span class="ended">{ended}</span>
-    {?airday}
-    <div class="airs">
-        Airs
-        {~s}<span class="time">{airtime}</span>
-        {~s}on
-        {~s}<span class="day">{airday}</span>
-        {~s}(<span class="timezone">{timezone}</span>)
+
+    <menu>
+        <a href="/show/{.id}/update" class="button update">
+            Update
+        </a>
+        {~s}
+        <a href="/show/{.id}/remove" class="button remove">
+            Remove
+        </a>
+        <br/>
+        {?seasons}
+            <button class="button toggle bigger" data-toggle=".seasons" data-state="true">
+                View Episodes
+            </button>
+        {:else}
+            Season / Episode information not available. Hit the 'Update' button to make it so.
+        {/seasons}
+    </menu>
+
+    <div class="period">
+        <span class="started">{.startdate}</span> - <span class="ended">{.ended}</span>
     </div>
-    {/airday}
-    <br/>
-    <button class="update button">Update</button>
-    <button class="remove button">Remove</button>
-    {>seasons:seasons/}
+
+    {?airday}
+        <div class="airs">
+            Airs
+            {~s}
+            <span class="time">
+                {.airtime}
+            </span>
+            {~s}
+            on
+            {~s}
+            <span class="day">
+                {.airday}
+            </span>
+            {~s}
+            (
+            <span class="timezone">
+                {.timezone}
+            </span>
+            )
+        </div>
+    {/.airday}
+
+    {>seasons/}
 </article>

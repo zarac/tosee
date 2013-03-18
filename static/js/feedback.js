@@ -18,7 +18,6 @@ var feedback = (function(defaultType) {
     var queue = [];
 
     var main = preinit = function(message) {
-        console.log('feedback not initialized. message queued (id=%s)', message.id);
         queue.push(message);
         return message;
     };
@@ -31,8 +30,9 @@ var feedback = (function(defaultType) {
     };
 
     var unify_message = function(message) {
-        if (!message.message) message = {
-            message: stringify_without_cycles(message) };
+        if (typeof message === 'string') message = { message: message };
+        else if (!message.message)
+            message = { message: stringify_without_cycles(message) };
         if (!message.type) message.type = defaultType;
         message.id = nextId++;
         return message;

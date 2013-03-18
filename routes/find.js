@@ -4,7 +4,10 @@ var tvrager = require('tvrager'),
 
 module.exports = (function() {
     return function(req, res) {
-        tvrager.find(req.params.query, function(result) {
+        tvrager.find(req.query.query, function(result) {
+            if (/application\/json/.test(req.headers.accept))
+                console.log('json it is..');
+            result.query = req.query.query;
             res_json(res, result);
         });
     };

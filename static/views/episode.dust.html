@@ -4,25 +4,12 @@
         <span class="number">
             {.number}
         </span>
-        {~s}-{~s}
-        <a href="{.url}" target="_blank">
-            <span class="title">
-                {.title}
-            </span>
+        <br/>
+        <a href="{_.url}/show/{#show}{id}{/show}/episode/{.eid}/toggleseen"
+            class="toggleseen">
+            {.title}
         </a>
     </header>
-
-    <menu>
-        <a href="{_.url}/show/{#show}{id}{/show}/episode/{.eid}/toggleseen"
-            class="toggle-seen seen button">
-            {?.seen}unseen{:else}seen{/.seen}
-        </a>
-        {~s}
-        <a href="http://thepiratebay.se/search/{#show}{name}{/show} {.eid}"
-            target="_blank">
-            <img src="img/tpb-cassette.png" alt="TPB" />
-        </a>
-    </menu>
 
     <div class="airs">
         Air date :
@@ -31,4 +18,24 @@
             {.airdate}
         </span>
     </div>
+
+    <menu>
+        <a href="{.url}" target="_blank">
+            <span class="title">
+                <img src="img/logo-tvrage-20x28.png" alt="TVRage" />
+            </span>
+        </a>
+        {~s}
+        <a href="http://thepiratebay.se/search/{#show}{name}{/show} {.eid}"
+            target="_blank">
+            <img src="img/logo-tpb-27x20.png" alt="TPB" />
+        </a>
+        {~s}
+        <a href="http://www.bit-hdtv.com/torrents.php?search={#show}{name}{/show} {.eid}"
+            target="_blank">
+            <span class="logo">
+                <img src="img/logo-bithdtv-20x19.png" alt="BIT-HDTV" />
+            </span>
+        </a>
+    </menu>
 </article>

@@ -75,16 +75,16 @@ var www = new _www.WebServer(db, config),
     index = require('./routes/index'),
     find = require('./routes/find'),
     show = require('./routes/show');
-//* HTML5 routes
+//* routes
 www.route.get('/', index.html5(db));
-//* API routes
-www.route.get('/find', find());
+www.route.get('/find', find.tvrage());
 //www.route.post('/find/:query', find());
 www.route.get('/show/:id', show.main(db));
 www.route.get('/show/:id/add', show.add(db));
 www.route.get('/show/:id/remove', show.remove(db));
 www.route.get('/show/:id/update', show.update(db));
-www.route.get('/show/:sid/episode/:eid/toggleseen', show.toggle_seen(db));
+www.route.get('/show/:sid/season/:seid/toggleseen', show.season.toggle_seen(db));
+www.route.get('/show/:sid/episode/:eid/toggleseen', show.episode.toggle_seen(db));
 
 
 /**

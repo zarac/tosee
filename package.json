@@ -1,9 +1,9 @@
 {
-  "name": "template-web-node",
+  "name": "to-see",
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node app",
+    "start": "./bin/symlinkall.sh; node app",
     "postinstall": "cp node_modules/dustjs-linkedin/dist/dust-full-1.1.1.js static/js/"
   },
   "dependencies": {

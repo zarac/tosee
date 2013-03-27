@@ -1,36 +1,14 @@
-<article class="show" data-id="{.id}">
+<article class="show" data-id="{.id}" class="name toggle"
+    data-toggle=".seasons" data-state="false">
     <header>
-        <a href="{.url}" target="_blank">
-            <span class="name">
-                {.name}
-            </span>
-        </a>
+        <span class="name toggle" data-toggle=".seasons"
+            data-state="false">
+            {.name}
+        </span>
     </header>
 
-    <menu>
-        <a href="/show/{.id}/update" class="button update">
-            Update
-        </a>
-        {~s}
-        <a href="/show/{.id}/remove" class="button remove">
-            Remove
-        </a>
-        <br/>
-        {?seasons}
-            <button class="button toggle bigger" data-toggle=".seasons" data-state="true">
-                View Episodes
-            </button>
-        {:else}
-            Season / Episode information not available. Hit the 'Update' button to make it so.
-        {/seasons}
-    </menu>
-
-    <div class="period">
-        <span class="started">{.startdate}</span> - <span class="ended">{.ended}</span>
-    </div>
-
     {?airday}
-        <div class="airs">
+        <p class="airs">
             Airs
             {~s}
             <span class="time">
@@ -48,8 +26,30 @@
                 {.timezone}
             </span>
             )
-        </div>
+        </p>
     {/.airday}
+
+    <p class="period">
+        <span class="started">{.startdate}</span> - <span class="ended">{.ended}</span>
+    </p>
+
+    <menu>
+        <a href="/show/{.id}/remove" class="remove">
+            Remove
+        </a>
+        {~s}
+        <a href="{.url}" target="_blank">
+            <img src="img/logo-tvrage-20x28.png" alt="TVRage" />
+        </a>
+        {~s}
+        <a href="https://en.wikipedia.org/w/index.php?search={.name}" target="_blank">
+            <img src="img/logo-wikipedia-20x22.png" alt="WikiPedia" />
+        </a>
+        {~s}
+        <a href="/show/{.id}/update" class="update">
+            Update
+        </a>
+    </menu>
 
     {>seasons/}
 </article>

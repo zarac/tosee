@@ -12,16 +12,25 @@
         <script defer src="js/index.js"></script>
     </head>
     <body>
-        <header class="biggest">
-            What to see next?
+        <header class="biggest clickable">
+            What to see next..?
         </header>
+
+        {>user/}
 
         {>shows/}
 
         {>finder/}
 
         <footer>
-            See <a href="https://github.com/zarac/tosee">github.com/zarac/tosee</a> for more.
+            <p>
+                Source code and credits at
+                {~s}
+                <a href="https://github.com/zarac/tosee" target="_blank">
+                    github.com/zarac/tosee
+                </a>
+                .
+            </p>
         </footer>
     </body>
 </html>

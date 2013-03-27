@@ -1,7 +1,11 @@
 {?seasons}
-<section class="seasons">
-    {#seasons show=.}
-        {>season/}
-    {/seasons}
-</section>
+    <section class="seasons">
+        {#seasons show=.}
+            {>season/}
+        {/seasons}
+        <footer>
+        </footer>
+    </section>
+{:else}
+    Season / Episode information not available. Hit the 'Update' button to make it so.
 {/seasons}

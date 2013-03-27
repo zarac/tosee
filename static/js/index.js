@@ -9,17 +9,92 @@ dust.onLoad = function(name, callback) {
     });
 };
 
+var dusted = function() {
+    console.log(arguments); };
+
+/*
+var dusted = function(in) {
+    return function(err, out) {
+        console.log('err, out : ', err, out); }; };
+    */
+
+/**
+ * dustify
+ *  render ajax reponse data based on its fields
+ *  apply various UI specifics for the given model
+ */
+var dustify = function(data) {
+    if (data.error)
+        feedback.error(data.error)
+    else if (data.episode)
+        dust.render('episode', data.episode, function(err, out) {
+            var showE = $('article.show[data-id=' + data.episode.show.id + ']'),
+                episodeE = showE.find('article.episode[data-id=' + data.episode.eid + ']'),
+                out = $(out)
+            episodeE.replaceWith(out)
+            ui_update_status_upstream(out.parents('article.season'))
+            togglit.hide_hiddens() })
+    else if (data.season)
+        dust.render('season', data.season, function(err, out) {
+            var showE = $('article.show[data-id=' + data.season.show.id + ']'),
+                seasonE = showE.find('article.season[data-id=' + data.season.number + ']'),
+                out = $(out)
+            var state = seasonE.find('[data-toggle=".episodes"]').data('state')
+            out.find('[data-toggle=".episodes"]').attr('data-state', state)
+            seasonE.replaceWith(out)
+            ui_update_status_upstream(out)
+            togglit.hide_hiddens() } )
+    else if (data.show)
+        if (data.show._removed) {
+            feedback.success('Show removed.')
+            $('article.show[data-id="' + data.show.id + '"]').remove() }
+        else {
+            dust.render('show', data.show, function(err, out) {
+                out = $(out)
+                var showE = $('article.show[data-id="' + data.show.id + '"]')
+                if (showE.length > 0)
+                    showE.replaceWith(out)
+                else
+                    $('section.shows').append(out)
+                ui_update_show_status(out)
+                togglit.hide_hiddens()
+                scrollTo(out) }) }
+    else if (data.finder) {
+        dust.render('finder-result', data.finder, function(err, out) {
+            out = $(out)
+            $('#finder section.result').replaceWith(out) }) }
+    else {
+        console.log(' === unhandled data', data)
+        feedback.warning('Sorry, unable to handle data.') } }
+
+var ui_update_show_status = function(showE) {
+    var seasons = $(showE).find('article.season')
+    var status = true
+    for (var i = 0; i < seasons.length; i++) {
+        if (!ui_update_season_status(seasons[i]))
+            status = false }
+    if (status)
+        showE.attr('data-status', 'seen')
+    else
+        showE.attr('data-status', 'unseen')
+}
+
+var ui_update_season_status = function(seasonE) {
+    var season = $(seasonE)
+    var episodes = season.find('article.episode')
+    for (var i = 0; i < episodes.length; i++) {
+        if ($(episodes[i]).data('status') == 'unseen') {
+            season.attr('data-status', 'unseen')
+            return false } }
+    seasonE.attr('data-status', 'seen')
+    return true }
 
 /**
  * UI
  */
 function scrollTo(element) {
     $("html, body").stop().animate({ scrollTop: element.offset().top - 5 },
-            1000)
-    $(element).addClass('animated pulse')
-    window.setTimeout(function() {
-        $(element).removeClass('pulse')
-    }, 1000)
+            300);
 }
 
 
@@ -28,6 +103,8 @@ function scrollTo(element) {
  */
 var ajaxify = {
     _methods: ['post', 'get', 'update', 'delete'],
+    it: function(cb) {
+        console.log('not implemented'); },
     a: function(res_handler) {
         if (!res_handler) res_handler = this.default_handler;
         return function(e) {
@@ -43,6 +120,9 @@ var ajaxify = {
                 success: function(res) {
                     $('.feedback.item[data-id=' + fid + ']').remove();
                     res_handler(res, e, this);
+                },
+                error: function(e) {
+                    feedback.error(e);
                 }
             }, 'json');
         };
@@ -62,6 +142,9 @@ var ajaxify = {
                 success: function(res) { 
                     $('.feedback.item[data-id=' + fid + ']').remove();
                     res_handler(res, e, this);
+                },
+                error: function(e) {
+                    feedback.error(e);
                 }
             });
         };
@@ -71,6 +154,62 @@ var ajaxify = {
     }
 };
 
+var ajax_handler = function(res) {
+    console.log('ajax_hander res=', res);
+    if (res.episode) { }
+    else if (res.season) {
+        dustify('season', res.show);
+        dust.render('show', res.show, dusted(show)) }
+    else if (res.show) {
+        dustify('show', res.show);
+        dust.render('show', res.show, dusted(show)) }
+    else { } };
+
+/**
+ * AJAXify A and FORM elements.
+ *  ! dust and the dustify snippet
+ *  * The targets must be RESTful like URLs. (actually, not really)
+ *  * The responses must be JSON format and the name of the property is the
+ *    name of the model to be dustified. E.g. { season: { .. } }.
+ */
+var ajaxified = {
+    aClick : function(event) {
+        event.preventDefault()
+        var fid = feedback.info('AJAXing').id
+        var href = $(this).attr('href')
+        $.ajax( {
+            foo: 'bar',
+            fid: fid,
+            url: href,
+            dataType: 'json',
+            success: ajaxified.on_success_a,
+            error: ajaxified.on_error } ) },
+    formSubmit : function(event) {
+        event.preventDefault()
+        var fid = feedback.info('AJAXing').id
+        var form = $(this)[0]
+        var data = $(form).serializeArray();
+        $.ajax( {
+            fid: fid,
+            type: form.method,
+            url: form.action,
+            data: data,
+            dataType: 'json',
+            success: ajaxified.on_success_form,
+            error: ajaxified.on_error } ) },
+    init : function() {
+        $('body').on('click', 'a[target!=_blank]', this.aClick)
+        $('body').on('submit', 'form', this.formSubmit) },
+    on_error : function(data) { //* TODO test
+        feedback.remove(this.fid)
+        console.log('this, data', this, data)
+        feedback.error('Ran into trouble while AJAXing... (see console for more info)') },
+    on_success_a : function(data) {
+        feedback.remove(this.fid)
+        dustify(data) },
+    on_success_form : function(data) { 
+        feedback.remove(this.fid)
+        dustify(data) } }
 
 /**
  * ajaxified response handlers
@@ -88,7 +227,7 @@ var on_res_add = function(res, e, ajax) {
 };
 
 var on_res_find = function(res, e, ajax) {
-    dust.render('finder-result', res, function(err, out) {
+    dust.render('shows', res.result, function(err, out) {
         $('#finder .result').replaceWith(err || out);
     });
 };
@@ -118,7 +257,27 @@ var on_res_show_update = function(res, e, ajax) {
     }
 };
 
-var on_res_toggle_seen = function(res, e, ajax) {
+var on_res_user_auth = function(res, e, ajax) {
+    if (res.error) feedback(res.error);
+    else {
+        dust.render('user', res, function(err, out) { 
+            var out = $(out);
+            var old = $('section.user');
+            old.replaceWith(err || out);
+        });
+    }
+};
+
+var on_res_season_toggleseen = function(res, e, ajax) {
+    var cur_season = $(e.target).parents('article.season');
+    dust.render('season', res, function(err, out) {
+        var season = $(out);
+        cur_season.replaceWith(err || season);
+        ui_update_status_upstream(season);
+    });
+};
+
+var on_res_episode_toggleseen = function(res, e, ajax) {
     var cur_episode = $(e.target).parents('article.episode');
     dust.render('episode', res, function(err, out) {
         var episode = $(out);
@@ -127,6 +286,7 @@ var on_res_toggle_seen = function(res, e, ajax) {
         ui_update_status_upstream(season[0]);
     });
 };
+
 
 //* update status where relevant
 var ui_update_status_upstream = function(season) {
@@ -148,14 +308,19 @@ var ui_update_status_upstream = function(season) {
 
 
 /**
- * Generic toggler
+ * Get the closest ancestor matching one of the given selectors.
+ * <
+ *  jQuery object
+ *  Array of CSS selectors (strings)
  */
-var on_toggle = function() {
-    var toggler = $(this);
-    var article = toggler.parents('article');
-    article.children(toggler.data('toggle')).toggle('slow', function() {
-        toggler.attr('data-state', $(this).is(':visible'));
-    });
+var get_closest_ancestor = function(e, selectors) {
+    if (!Array.isArray(selectors)) return;
+    var p = e.parent();
+    if (p.length == 0) return;
+    for (var i = 0; i < selectors.length; i++)
+        if (p.is(selectors[i]))
+            return p;
+    return get_closest_ancestor(p, selectors);
 };
 
 
@@ -181,41 +346,69 @@ var backgroundizer = {
         'vintage_speckles.png',
         'white_carbon.png'
     ],
-    _currentPic : 'natural_paper.png',
+    _currentPic : 'gplaypattern.png',
     _getNextPicture : function() {
-        _currentPic = _pictures.shift();
-        _pictures.push(_currentPic);
-        return currentPic;
+        backgroundizer._currentPic = backgroundizer._pictures.shift();
+        backgroundizer._pictures.push(backgroundizer._currentPic);
+        return backgroundizer._currentPic;
     },
     nextPic : function() {
-        $('body').css('background-image', 'url("/img/subtlepatterns/' + _getNextPicture() + '")');
+        $('body').css('background-image', 'url("/img/subtlepatterns/' + backgroundizer._getNextPicture() + '")');
     }
 };
 
 
 /**
+ * Generic toggler
+ */
+var togglit = {
+    init : function() {
+        $('body').on('click', '.toggle', this.on_toggle)
+        this.hide_hiddens() },
+
+    //* Hide all hidden toggleables.
+    hide_hiddens : function() {
+        $('.toggle[data-state=false]').each(function(a, b) {
+            var e = $(this)
+            e.parents('article').children(e.data('toggle')).hide() }) },
+
+    on_toggle : function() {
+        var toggler = $(this)
+        var article = toggler.parents('article')
+        var toggleable = article.children(toggler.data('toggle'))
+        toggleable.toggle(120, function() {
+            var visible = toggleable.is(':hidden')
+            toggler.attr('data-state', !visible)
+            scrollTo(article) } ) } }
+
+/**
  * DOM ready
  */
 $(function() {
-    //* UI init.
-    $('body').on('click', '.toggle', on_toggle);
-    $('#shows').on('click', 'article.show a.remove.button',
+    ajaxified.init()
+    togglit.init()
+
+    //* UI stuff
+    /*
+    $('body').on('click', 'section.user form .submit',
+            ajaxify.form(on_res_user_auth));
+
+    $('#shows').on('click', 'article.show a.remove',
             ajaxify.a(on_res_show_remove));
-    $('#shows').on('click', 'article.show a.update.button',
+    $('#shows').on('click', 'article.show a.update',
             ajaxify.a(on_res_show_update));
-    $('#shows').on('click', 'article.episode a.toggle-seen.button',
-            ajaxify.a(on_res_toggle_seen));
+    $('#shows').on('click', 'article.season a.toggleseen',
+            ajaxify.a(on_res_season_toggleseen));
+    $('#shows').on('click', 'article.episode a.toggleseen',
+            ajaxify.a(on_res_episode_toggleseen));
+
     $('#finder').on('click', 'form .find.button', ajaxify.form(on_res_find));
     $('#finder').on('click', 'a.add.button', ajaxify.a(on_res_add));
+    */
 
+    //* needed for pretty colors
     $('article.season').each(function(i, e) {
         ui_update_status_upstream(e);
-    });
-
-    //* Hide all hidden toggleables.
-    $('.toggle[data-state=true]').each(function(a, b) {
-        var e = $(this);
-        e.parents('article').children(e.data('toggle')).hide();
     });
 
     //* Testing background-pictures.

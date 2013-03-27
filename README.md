@@ -39,6 +39,13 @@ Hannes Landstedt a.k.a. zarac
 https://github.com/zarac/tosee.git
 
 
+## Thanks
+* TVRage.com for data
+* http://findicons.com/icon/267827/eye
+* http://findicons.com/icon/267836/eye_inv
+* All those forgotten...
+
+
 ## License
 [NULL (No Unnecessary License - License)][NULL]
 

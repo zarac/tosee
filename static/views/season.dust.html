@@ -1,14 +1,28 @@
 <article class="season" data-id="{.number}">
-    <header class="clickable toggle" data-toggle=".episodes" data-state="true">
+    <header class="clickable toggle" data-toggle=".episodes" data-state="false">
         Season
         {~s}
         <span class="number">
             {.number}
         </span>
     </header>
-    <a href="http://thepiratebay.se/search/{#show}{name}{/show} season {.number}"
-        target="_blank">
-        <img src="img/tpb-cassette.png" alt="TPB" />
-    </a>
+    <menu>
+        <a href="/show/{#show}{.id}{/show}/season/{.number}/toggleseen"
+            class="toggleseen">
+            <img src="img/eye-20x20.png" alt="Toggle all seen" />
+        </a>
+        {~s}
+        <a href="http://thepiratebay.se/search/{#show}{name}{/show} season {.number}"
+            target="_blank">
+            <img src="img/logo-tpb-27x20.png" alt="TPB" />
+        </a>
+        {~s}
+        <a href="http://www.bit-hdtv.com/torrents.php?search={#show}{name}{/show} S{.number}"
+            target="_blank">
+            <span class="logo">
+                <img src="img/logo-bithdtv-20x19.png" alt="BIT-HDTV" />
+            </span>
+        </a>
+    </menu>
     {>episodes/}
 </article>

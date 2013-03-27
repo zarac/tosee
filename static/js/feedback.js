@@ -10,7 +10,7 @@
  *  Hannes Landstedt a.k.a. zarac
  *
  * TODO
- *  Allow multiple parameters.
+ *  Support multiple parameters.
  */
 
 var feedback = (function(defaultType) {
@@ -18,14 +18,16 @@ var feedback = (function(defaultType) {
     var queue = [];
 
     var main = preinit = function(message) {
+        message = unify_message(message)
         queue.push(message);
         return message;
     };
 
     var postinit = function(message) {
+        message = unify_message(message)
         dust.render('feedback-message', message, function(err, out) {
             var out = $(out);
-            $('#feedback .list').append(out);
+            $('section.feedback').append(out);
             //* TODO remove after X time (only success and info)
         });
         return message;
@@ -33,8 +35,12 @@ var feedback = (function(defaultType) {
 
     var unify_message = function(message) {
         if (typeof message === 'string') message = { message: message };
-        else if (!message.message)
+        else if (!(typeof message === "object" ) || !message.message)
             message = { message: stringify_without_cycles(message) };
+        //* TODO fix..
+        else if (typeof message.message === "object" )
+            message.message = { message:
+                stringify_without_cycles(message.message) };
         if (!message.type) message.type = defaultType;
         message.id = nextId++;
         return message;
@@ -61,8 +67,7 @@ var feedback = (function(defaultType) {
     }
 
     var feedback = function(message) {
-        return main(unify_message(message));
-    };
+        return main(message) }
 
     feedback.init = function(callback) {
         dust.render('feedback', {}, function(err, out) {
@@ -74,24 +79,29 @@ var feedback = (function(defaultType) {
         });
     };
 
+    feedback.remove = function(fid) {
+        $('article.feedback[data-id="' + fid + '"]').remove() }
+
+    feedback.close = function(e) {
+        $(e.target).parents('article').hide(120, function() {
+            $(this).remove();
+        });
+    };
+
     feedback.error = function(message) {
-        main({ type: 'error', message: message });
+        return main({ type: 'error', message: message });
     };
 
     feedback.info = function(message) {
-        main({ type: 'info', message: message });
+        return main({ type: 'info', message: message });
     };
 
     feedback.success = function(message) {
-        main({ type: 'success', message: message });
+        return main({ type: 'success', message: message });
     };
 
     feedback.warning = function(message) {
-        main({ type: 'warning', message: message });
-    };
-
-    feedback.close = function(e) {
-        $(e.target).parents('article').remove();
+        return main({ type: 'warning', message: message });
     };
 
     return feedback;
@@ -99,7 +109,7 @@ var feedback = (function(defaultType) {
 
 $(function() {
     feedback.init(function() {
-        $('#feedback').on('click', '.button.close', feedback.close);
+        $('section.feedback').on('click', '.button.close', feedback.close);
         /* Test
         feedback('testing string');
         feedback({ message: 'testing obj.message' });

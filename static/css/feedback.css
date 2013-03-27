@@ -1,45 +1,56 @@
-#feedback {
+section.feedback {
     left: 0;
     position: fixed;
     right: 0;
     top: 10px;
 }
 
-.feedback {
-    margin: 5px;
-    padding: 5px;
-    border-radius: 5px;
-    box-shadow: 5px;
+article.feedback {
+    border-radius: 1em;
+    display: inline-block;
+    font-size: 1.2em;
+    margin: 1em 10em;
+    min-width: 800px;
+    padding: 1em;
+    text-align: left;
+    vertical-align: middle;
+}
+
+article.feedback menu {
+    float: right;
+    margin: 0;
+    padding: 0;
+}
+
+article.feedback button.close {
+    padding: 0 0.3em;
+    font-size: 3.0em;
 }
 
 .feedback.error {
-    background-color: rgba(255, 85, 85, 0.85);
-    border: 1px solid #FF5555;
+    background-color: rgba(255, 85, 85, 0.52);
+    border: 6px dashed #FF5555;
     color: #FF5555;
 }
 
 .feedback.info {
-    background-color: rgba(85, 85, 255, 0.85);
-    border: 1px solid #5555FF;
+    background-color: rgba(85, 85, 255, 0.52);
+    border: 6px dashed #5555FF;
     color: #5555FF;
 }
 
 .feedback.success {
-    background-color: rgba(85, 255, 85, 0.85);
-    border: 1px solid #55FF55;
+    background-color: rgba(85, 255, 85, 0.52);
+    border: 6px dashed #55FF55;
     color: #55FF55;
 }
 
 .feedback.warning {
-    background-color: rgba(255, 255, 85, 0.85);
-    border: 1px solid #FFFF55;
+    background-color: rgba(255, 255, 85, 0.52);
+    border: 6px dashed #FFFF55;
     color: #FFFF55;
 }
 
 .feedback .message {
     color: #38051F;
-}
-
-article.feedback menu {
-    float: right;
 }

@@ -48,6 +48,13 @@ var dustify = function(data) {
                 ui_update_show_status(out)
                 togglit.hide_hiddens()
                 scrollTo(out) }) }
+    else if (data.user) {
+        if (data.user.query) {
+            dust.render('user-find', data.user, function(err, out) { 
+                $('section.user section.find').replaceWith(out) } ) }
+        else {
+            dust.render('user', data, function(err, out) {
+                $('section.user').replaceWith(out) }) } }
     else if (data.finder) {
         dust.render('finder-result', data.finder, function(err, out) {
             out = $(out)
@@ -111,8 +118,18 @@ var ajaxify = {
             dataType: 'json',
             success: ajaxify.on_success_a,
             error: ajaxify.on_error } ) },
+
+    formContentChange : function(event) {
+        var form = event.currentTarget.form
+        if (form.password.value.length == 0)
+            if (form.username.value.length < 1) {
+                $('section.user section.find').html('') }
+            else {
+                $(form).trigger('submit') } }, 
+
     formSubmit : function(event) {
         event.preventDefault()
+        console.log('submitted')
         var fid = feedback.info('AJAXing').id
         var form = $(this)[0]
         var data = $(form).serializeArray()
@@ -124,16 +141,20 @@ var ajaxify = {
             dataType: 'json',
             success: ajaxify.on_success_form,
             error: ajaxify.on_error } ) },
+
     init : function() {
         $('body').on('click', 'a[target!=_blank]', this.aClick)
-        $('body').on('submit', 'form', this.formSubmit) },
+        $('body').on('submit', 'form', this.formSubmit)
+        $('body').on('keyup', 'form input[name="username"]', this.formContentChange) },
+
     on_error : function(data) { //* TODO test
         feedback.remove(this.fid)
-        console.log('this, data', this, data)
-        feedback.error('Ran into trouble while AJAXing... (see console for more info)') },
+        feedback.error('Ran into trouble while AJAXing. [' + data.status + ' : ' + data.responseText + '].') },
+
     on_success_a : function(data) {
         feedback.remove(this.fid)
         dustify(data) },
+
     on_success_form : function(data) { 
         feedback.remove(this.fid)
         dustify(data) } }

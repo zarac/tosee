@@ -38,6 +38,11 @@ var db_url = process.env.CC_DB_URL || 'mongodb://localhost/z-to-see',
  * database
  * <
  *  db_config
+ *   TODO
+ *    use model specifications
+ *     type
+ *     accepted values
+ *     default
  */
 var _db = require('./lib/database');
 var db_config = {
@@ -57,6 +62,14 @@ var db_config = {
 };
 var db = new _db.Database(db_config);
 
+/*
+var mongo = require('./lib/database/mongo')
+mongo.connect(db_url, function connected() {
+    var bert = mongo.models.User( { username: 'bert' } ) 
+    var ake = mongo.models.User( { username: 'ake' } )
+    ake.save() })
+    */
+
 
 /**
  * web server
@@ -73,8 +86,10 @@ var config = {
 };
 var www = new _www.WebServer(db, config),
     index = require('./routes/index'),
+    user = require('./routes/user'),
     find = require('./routes/find'),
     show = require('./routes/show');
+
 //* routes
 www.route.get('/', index.html5(db));
 www.route.get('/find', find.tvrage());
@@ -85,18 +100,25 @@ www.route.get('/show/:id/remove', show.remove(db));
 www.route.get('/show/:id/update', show.update(db));
 www.route.get('/show/:sid/season/:seid/toggleseen', show.season.toggle_seen(db));
 www.route.get('/show/:sid/episode/:eid/toggleseen', show.episode.toggle_seen(db));
+www.route.post('/user', user.smart);
+www.route.get('/user/confirm', user.confirm);
+www.route.get('/user/exit', user.exit);
+www.route.get('/user/find', user.find);
+www.route.get('/user/login', user.login);
+www.route.get('/user/register', user.register);
+www.route.get('/user/show/:id/add', user.show.add(db));
 
 
 /**
  * run
  */
-db.connect(db_url, function onConnected(con) {
+db.connect(db_url, function connected(con) {
     console.log('connectd to database [ ' + db_url + ' ]');
-    www.listen(www_url, function onListening(o) {
+    www.listen(www_url, function listening(o) {
         console.log('web server listening [ ' + www_url + ' ]');
-        db.log.insert({ status: 'all ok', db: db_url, www: www_url },
-            function(err, doc) {
-                if (err) console.log('ERROR: ', err);
-            });
+        //db.log.insert({ status: 'all ok', db: db_url, www: www_url },
+            //function(err, doc) {
+                //if (err) console.log('ERROR: ', err);
+            //});
     });
 });

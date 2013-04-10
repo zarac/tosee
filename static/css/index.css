@@ -63,13 +63,14 @@ article > menu a {
     margin: 0.3em;
 }
 
-form .submit {
+form input[type="submit"] {
     cursor: pointer;
 }
 
 input {
     background-color: rgba(125, 106, 202, 0.24);
-    border: 2px solid rgba(118, 130, 192, 0.73);
+    /*border: 2px solid rgba(118, 130, 192, 0.73);*/
+    border: 0;
     border-radius: 0.7em;
     margin: 0.3em;
     padding: 0.4em;
@@ -87,8 +88,8 @@ button {
 }
 
 .big { font-size: 1.3em; }
-.bigger { font-size: 2.7em; }
-.biggest { font-size: 4.7em; }
+.bigger { font-size: 2em; }
+.biggest { font-size: 3em; }
 
 .small { font-size: 0.92em; }
 .smaller { font-size: 0.83em; }
@@ -112,7 +113,7 @@ article.show,
 article.season,
 article.episode {
     background-color: rgba(249, 255, 100, 0.16);
-    border: 2px solid rgba(167, 167, 167, 0.40);
+    /*border: 2px solid rgba(167, 167, 167, 0.40);*/
     border-radius: 1em;
     display: inline-block;
     vertical-align: top;
@@ -139,28 +140,28 @@ article.show[data-status="available"],
 article.season[data-status="available"],
 article.episode[data-status="available"] {
     background-color: rgba(56, 206, 56, 0.1);
-    border: 2px solid rgba(28, 146, 28, 0.40);
+    /*border: 2px solid rgba(28, 146, 28, 0.40);*/
 }
 
 article.show[data-status="unavailable"],
 article.season[data-status="unavailable"],
 article.episode[data-status="unavailable"] {
     background-color: rgba(255, 85, 85, 0.1);
-    border: 2px solid rgba(255, 85, 85, 0.40);
+    /*border: 2px solid rgba(255, 85, 85, 0.40);*/
 }
 
 article.show[data-status="unseen"],
 article.season[data-status="unseen"],
 article.episode[data-status="unseen"] {
     background-color: rgba(56, 206, 56, 0.1);
-    border: 2px solid rgba(28, 146, 28, 0.40);
+    /*border: 2px solid rgba(28, 146, 28, 0.40);*/
 }
 
 article.show[data-status="seen"],
 article.season[data-status="seen"],
 article.episode[data-status="seen"] {
     background-color: rgba(54, 54, 54, 0.1);
-    border: 2px solid rgba(97, 97, 97, 0.40);
+    /*border: 2px solid rgba(97, 97, 97, 0.40);*/
 }
 
 
@@ -175,21 +176,7 @@ article.episode[data-status="seen"] {
     text-align: center;
 }
 
-#finder .query {
-    text-align: center;
-}
-
-#finder input {
-    font-size: 2em;
-    padding: 0.2em;
-}
-
-#finder input[type=submit] {
-    border-radius: 0.4em;
-}
-
 #finder input[type=text] {
-    border-radius: 0.7em;
     width: 25em;
 }
 

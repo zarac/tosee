@@ -4,13 +4,16 @@
   "private": true,
   "scripts": {
     "start": "./bin/symlinkall.sh; node app",
-    "postinstall": "cp node_modules/dustjs-linkedin/dist/dust-full-1.1.1.js static/js/"
+    "postinstall": "cp node_modules/dustjs-linkedin/dist/dust-full-1.2.0.js static/js/ ; cp node_modules/dustjs-helpers/dist/dust-helpers-1.1.1.js static/js/"
   },
   "dependencies": {
     "express": "3.1",
+    "connect-powered-by": "0.1",
     "mongodb": "1.2",
+    "mongoose": "3.6",
     "consolidate": "0.8",
-    "dustjs-linkedin": "1.1",
+    "dustjs-linkedin": "1.2",
+    "dustjs-helpers": "1.1",
     "xml2js": "0.2",
     "eyes": "0.1",
     "tvrager": "0.4"

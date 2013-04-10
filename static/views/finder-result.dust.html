@@ -14,8 +14,12 @@
             <section class="items list">
                 {#result.shows}
                     <article class="result item" data-id="{id}">
+                        <a href="/user/show/{id}/add" class="add button">
+                            User +
+                        </a>
+                        {~s}
                         <a href="/show/{id}/add" class="add button">
-                            Add
+                            +
                         </a>
                         {~s}
                         <a href="{url}" target="_blank">

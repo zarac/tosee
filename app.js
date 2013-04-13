@@ -31,7 +31,7 @@ console.Zkeys = function(obj) {
  * config
  */
 var db_url = process.env.CC_DB_URL || 'mongodb://localhost/z-to-see',
-    www_url = process.env.CC_WWW_URL || 'http://0.0.0.0:3000';
+    www_url = process.env.CC_WWW_URL || 'http://0.0.0.0:3010';
 
 
 /**

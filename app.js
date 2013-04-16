@@ -104,7 +104,7 @@ www.route.post('/user', user.smart);
 www.route.get('/user/confirm', user.confirm);
 www.route.get('/user/exit', user.exit);
 www.route.get('/user/find', user.find);
-www.route.get('/user/login', user.login);
+www.route.post('/user/login', user.login);
 www.route.get('/user/register', user.register);
 www.route.get('/user/show/:id/add', user.show.add(db));
 

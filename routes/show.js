@@ -87,6 +87,7 @@ module.exports = {
             //* TODO
             // get full show info.
             // ? auto add if nonexistent
+            res.json('not implemented')
             console.log('not implemented 8F0F') } },
 
     remove : function(db) {

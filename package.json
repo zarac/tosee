@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "./bin/symlinkall.sh; node app",
-    "postinstall": "cp node_modules/dustjs-linkedin/dist/dust-full-1.2.0.js static/js/ ; cp node_modules/dustjs-helpers/dist/dust-helpers-1.1.1.js static/js/"
+    "start": "sh ./bin/symlinkall.sh; node app",
+    "postinstall": "sh ./bin/postinstall.sh"
   },
   "dependencies": {
     "express": "3.1",

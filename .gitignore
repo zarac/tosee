@@ -1,4 +1,5 @@
 node_modules/
+npm-debug.log
 static/js/dust-full-1.2.0.js
 static/js/dust-helpers-1.1.1.js
-npm-debug.log
+static/js/underscore-min.js

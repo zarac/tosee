@@ -1,4 +1,9 @@
-<header>
-  [ user.dust.html ]
-  TODO .. 
-</header>
+<section class="user">
+    {?user}
+        {#user}
+            {>user-loggedin/}
+        {/user}
+    {:else}
+        {>user-loggedout/}
+    {/user}
+</section>

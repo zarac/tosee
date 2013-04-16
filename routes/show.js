@@ -84,6 +84,7 @@ module.exports = {
 
     main : function(db) {
         return function(req, res) {
+            console.log('req.user = ', req.user)
             //* TODO
             // get full show info.
             // ? auto add if nonexistent

@@ -16,6 +16,7 @@
     "dustjs-helpers": "1.1",
     "xml2js": "0.2",
     "eyes": "0.1",
-    "tvrager": "0.4"
+    "tvrager": "0.4",
+    "underscore": "1.4"
   }
 }

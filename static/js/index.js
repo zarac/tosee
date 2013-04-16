@@ -144,8 +144,9 @@ var ajaxify = {
 
     init : function() {
         $('body').on('click', 'a[target!=_blank]', this.aClick)
-        $('body').on('submit', 'form', this.formSubmit)
-        $('body').on('keyup', 'form input[name="username"]', this.formContentChange) },
+        $('body').on('submit', 'form', this.formSubmit) },
+        //$('body').on('keyup', 'form input[name="username"]',
+                //this.formContentChange) },
 
     on_error : function(data) { //* TODO test
         feedback.remove(this.fid)

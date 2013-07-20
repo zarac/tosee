@@ -87,6 +87,7 @@ var config = {
 var www = new _www.WebServer(db, config),
     index = require('./routes/index'),
     user = require('./routes/user'),
+    sources = require('./routes/sources'),
     find = require('./routes/find'),
     show = require('./routes/show');
 
@@ -107,6 +108,7 @@ www.route.get('/user/find', user.find);
 www.route.post('/user/login', user.login);
 www.route.get('/user/register', user.register);
 www.route.get('/user/show/:id/add', user.show.add(db));
+www.route.get('/sources/:id', sources.source);
 
 
 /**

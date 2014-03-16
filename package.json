@@ -1,9 +1,10 @@
 {
   "name": "video",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
     "start": "sh ./bin/symlinkall.sh; node app",
+    "test": "sh ./bin/test.sh",
     "postinstall": "sh ./bin/postinstall.sh" },
   "dependencies": {
     "express": "3.1",

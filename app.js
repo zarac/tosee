@@ -10,10 +10,15 @@
  */
 
 
+/* dependencies */
+var _path = require('path')
+var _eyes = require('eyes') // TODO should perhaps not be required
+
+
 /**
  * debug help
  */
-console.eyes = require('eyes').inspector({ maxLength: 0 })
+console.eyes = _eyes.inspector({ maxLength: 0 })
 
 console.Zerror = function(err) {
   err.stack = err.stack.split('\n')
@@ -28,37 +33,38 @@ console.Zkeys = function(obj) {
 
 
 /**
- * config
+ * configuration
  */
-var db_url = process.env.CC_DB_URL || 'mongodb://localhost/z-to-see'
-var www_url = process.env.CC_WWW_URL || 'http://0.0.0.0:3010'
+var CFG = {
+  db : {
+    url: process.env.CC_DB_URL || 'mongodb://localhost/z-to-see',
+    models: {
+      log: { },
+      seen: { },
+      show: {
+        id: /[a-z0-9]/,
+        name: 'Unnamed Show' },
+      user: {
+        id: 0,
+        name: 'J. Random Watcher' } } },
+  www : {
+    url: process.argv[2] || process.env.CC_WWW_URL || 'http://0.0.0.0:3010',
+    views: _path.join(__dirname, '/static/views'),
+    static: _path.join(__dirname, '/static') } }
 
 
 /**
  * database
  * <
- *  db_config
+ *  config
  *   TODO
  *    use model specifications
  *     type
  *     accepted values
  *     default
  */
-var _db = require('./lib/database')
-
-var db_config = {
-  url: db_url,
-  models: {
-    log: { },
-    seen: { },
-    show: {
-      id: /[a-z0-9]/,
-      name: 'Unnamed Show' },
-    user: {
-      id: 0,
-      name: 'J. Random Watcher' } } }
-
-var db = new _db.Database(db_config)
+var _db = require('./lib/database.js')
+var db = new _db.Database(CFG.db)
 
 /*
    var mongo = require('./lib/database/mongo')
@@ -73,17 +79,11 @@ var db = new _db.Database(db_config)
  * web server
  * <
  *  db
- *  www_config
+ *  config
  */
-var _www = require('./lib/webserver')
-var _path = require('path')
+var _www = require('./lib/webserver.js')
 
-var config = {
-  url: www_url,
-  views: _path.join(__dirname, '/static/views'),
-  static: _path.join(__dirname, '/static') }
-
-var www = new _www.WebServer(db, config)
+var www = new _www.WebServer(db, CFG.www)
 var index = require('./routes/index')
 var user = require('./routes/user')
 var sources = require('./routes/sources')
@@ -113,7 +113,7 @@ www.route.get('/sources/:id', sources.source)
 /**
  * run
  */
-db.connect(db_url, function connected(con) {
-  console.log('connectd to database [ ' + db_url + ' ]')
-  www.listen(www_url, function listening(o) {
-    console.log('web server listening [ ' + www_url + ' ]') } ) } )
+db.connect(CFG.db.url, function connected(con) {
+  console.log('connectd to database [ ' + CFG.db.url + ' ]')
+  www.listen(CFG.www.url, function listening(o) {
+    console.log('web server listening [ ' + CFG.www.url + ' ]') } ) } )

@@ -113,7 +113,12 @@ www.route.get('/sources/:id', sources.source)
 /**
  * run
  */
-db.connect(CFG.db.url, function connected(con) {
-  console.log('connectd to database [ ' + CFG.db.url + ' ]')
+db.connect(CFG.db.url, function connected(err, con) {
+  if (err) {
+    console.error('Error connecting to database.', err)
+    process.exit(1) }
+
+  console.log('connected to database [ ' + CFG.db.url + ' ]')
+
   www.listen(CFG.www.url, function listening(o) {
     console.log('web server listening [ ' + CFG.www.url + ' ]') } ) } )
